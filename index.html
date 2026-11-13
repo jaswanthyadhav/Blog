@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLOG WEBSITE - RGUKT RK Valley | P Jaswanth</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5 CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+
+  <!-- =========================================================================
+       Main Navigation Bar
+       ========================================================================= -->
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="javascript:void(0)" onclick="window.blogApp.navigateTo('home')">
+        <i class="bi bi-journal-richtext text-primary"></i>
+        <span>BlogWebsite</span>
+        <span class="brand-badge">RGUKT</span>
+      </a>
+
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+          <li class="nav-item">
+            <a class="nav-link active" id="navLinkHome" href="javascript:void(0)"><i class="bi bi-house me-1"></i> Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link d-none" id="navLinkDashboard" href="javascript:void(0)">
+              <i class="bi bi-speedometer2 me-1"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link d-none" id="navLinkAdmin" href="javascript:void(0)">
+              <i class="bi bi-shield-shaded me-1"></i> Admin Dashboard
+              <span class="badge bg-warning text-dark ms-1">Admin</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Right Side Nav Actions -->
+        <div class="d-flex align-items-center gap-2">
+          <!-- Create Post Button (UC-04: visible when logged in) -->
+          <button class="btn btn-primary btn-sm d-none" id="navWritePostBtn">
+            <i class="bi bi-plus-lg me-1"></i> Write Post
+          </button>
+
+          <!-- Visitor Buttons (UC-01, UC-02) -->
+          <div id="authActionsVisitor" class="d-flex align-items-center gap-2">
+            <button class="btn btn-outline-primary btn-sm" onclick="window.blogApp.openLoginModal()">
+              <i class="bi bi-box-arrow-in-right me-1"></i> Log In
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="window.blogApp.openRegisterModal()">
+              <i class="bi bi-person-plus me-1"></i> Register
+            </button>
+          </div>
+
+          <!-- Logged-in User Dropdown (UC-03) -->
+          <div id="authActionsUser" class="dropdown d-none">
+            <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-2 border shadow-sm btn-sm" type="button" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <div class="avatar-sm" style="width: 24px; height: 24px; font-size: 0.7rem;">
+                <i class="bi bi-person-fill"></i>
+              </div>
+              <span id="userDisplayName" class="fw-semibold">User</span>
+              <span id="userRoleBadge" class="badge">ROLE</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userMenuDropdown">
+              <li>
+                <a class="dropdown-item" href="javascript:void(0)" id="navProfileLink">
+                  <i class="bi bi-speedometer2 me-2 text-primary"></i> Author Dashboard & Profile (UC-03)
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="javascript:void(0)" onclick="window.blogApp.openDbModal()">
+                  <i class="bi bi-database me-2"></i> Database & Backend Info
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item text-danger" href="javascript:void(0)" id="navLogoutBtn">
+                  <i class="bi bi-box-arrow-right me-2"></i> Log Out
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- =========================================================================
+       Main Content Container
+       ========================================================================= -->
+  <main class="container my-4">
+
+    <!-- -----------------------------------------------------------------------
+         VIEW 1: HOME & BROWSE POSTS (UC-07, UC-08)
+         ----------------------------------------------------------------------- -->
+    <div id="homeView">
+      <!-- Hero Banner -->
+      <section class="hero-section text-center text-md-start">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <span class="badge bg-light text-dark mb-2 px-3 py-1 fw-bold">Department of Computer Science &bull; RGUKT</span>
+            <h1 class="hero-title">Read, Share, and Discover Tech Insights</h1>
+            <p class="hero-subtitle">
+              A modern publishing platform for students and tech enthusiasts. Explore articles, write your experiences, and join constructive discussions.
+            </p>
+
+            <!-- Search Bar (UC-08) -->
+            <div class="search-bar-wrapper">
+              <i class="bi bi-search search-icon"></i>
+              <input type="text" id="searchInput" class="form-control search-input" placeholder="Search blog posts by title, keyword, or author..." aria-label="Search posts">
+            </div>
+          </div>
+          <div class="col-lg-4 d-none d-lg-block text-center">
+            <i class="bi bi-code-square text-white opacity-25" style="font-size: 11rem;"></i>
+          </div>
+        </div>
+      </section>
+
+      <!-- Category Filter Pills (UC-08) -->
+      <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+        <div class="categories-wrapper flex-grow-1" id="categoryPillsContainer">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+        <span class="text-muted small fw-semibold" id="postsCountText">Loading posts...</span>
+      </div>
+
+      <!-- Blog Posts Grid -->
+      <div class="row g-4" id="postsGrid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW 2: SINGLE POST DETAIL (UC-07, UC-09, UC-10, UC-11)
+         ----------------------------------------------------------------------- -->
+    <div id="postDetailView" class="d-none">
+      <div id="postDetailContent">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW 3: AUTHOR DASHBOARD & MANAGE PROFILE (UC-03)
+         ----------------------------------------------------------------------- -->
+    <div id="profileView" class="d-none">
+      <!-- Dashboard & Profile Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <h2 class="fw-bold mb-0"><i class="bi bi-speedometer2 text-primary me-2"></i> Author Dashboard & Profile</h2>
+            <span class="badge bg-primary text-white px-2 py-1 small">UC-03</span>
+          </div>
+          <p class="text-muted mb-0">Overview of your published articles, audience engagement, and profile settings.</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary" onclick="window.blogApp.openCreatePostModal()">
+            <i class="bi bi-plus-lg me-1"></i> Write Post
+          </button>
+          <button class="btn btn-outline-secondary" onclick="window.blogApp.navigateTo('home')">
+            <i class="bi bi-house me-1"></i> Home
+          </button>
+        </div>
+      </div>
+
+      <!-- Dashboard Statistics Counters (Key Metrics) -->
+      <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+          <div class="stat-card">
+            <div class="stat-icon primary"><i class="bi bi-journal-richtext"></i></div>
+            <div>
+              <div class="stat-num" id="profileStatPosts">0</div>
+              <div class="stat-label">Published Posts</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="stat-card">
+            <div class="stat-icon danger"><i class="bi bi-heart-fill"></i></div>
+            <div>
+              <div class="stat-num" id="profileStatLikes">0</div>
+              <div class="stat-label">Total Likes</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="stat-card">
+            <div class="stat-icon warning"><i class="bi bi-chat-dots-fill"></i></div>
+            <div>
+              <div class="stat-num" id="profileStatComments">0</div>
+              <div class="stat-label">Reader Comments</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="stat-card">
+            <div class="stat-icon success"><i class="bi bi-graph-up-arrow"></i></div>
+            <div>
+              <div class="stat-num" id="profileStatAvgLikes">0</div>
+              <div class="stat-label">Avg. Likes / Post</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Left Sidebar: Profile Card & Quick Info -->
+        <div class="col-lg-4">
+          <!-- Profile Identity Card -->
+          <div class="card shadow-sm border-0 rounded-4 text-center p-4 mb-4">
+            <div class="avatar-sm mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2.2rem;" id="profileAvatarInitial">
+              J
+            </div>
+            <h4 class="fw-bold mb-1" id="profileHeadingName">Jaswanth P</h4>
+            <div>
+              <span id="profileRoleBadge" class="badge badge-role-author">AUTHOR</span>
+            </div>
+            <p class="text-muted small mt-2">Member of RGUKT Blog Platform</p>
+            <hr>
+            <div class="text-start small text-muted">
+              <div class="mb-2"><i class="bi bi-mortarboard me-2 text-primary"></i> Computer Science Dept.</div>
+              <div class="mb-2"><i class="bi bi-geo-alt me-2 text-danger"></i> RGUKT RK Valley</div>
+              <div class="mb-2"><i class="bi bi-shield-check me-2 text-success"></i> Verified Student Author</div>
+              <div class="mb-2"><i class="bi bi-calendar3 me-2 text-info"></i> Member since <span id="profileJoinedDate">September 2026</span></div>
+              <div><i class="bi bi-tag me-2 text-warning"></i> Primary Focus: <strong id="profileTopCategory" class="text-dark">Technology</strong></div>
+            </div>
+            <hr>
+            <div class="d-grid gap-2">
+              <button class="btn btn-outline-primary btn-sm" onclick="window.blogApp.openCreatePostModal()">
+                <i class="bi bi-pencil-square me-1"></i> + Write New Post
+              </button>
+              <button id="profileAdminShortcutBtn" class="btn btn-outline-warning btn-sm d-none" onclick="window.blogApp.navigateTo('admin')">
+                <i class="bi bi-shield-lock me-1"></i> Admin Management (UC-12)
+              </button>
+            </div>
+          </div>
+
+          <!-- Top Performing Article Card -->
+          <div class="card shadow-sm border-0 rounded-4 p-4 mb-4" id="profileTopPostCard">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h6 class="fw-bold mb-0 text-dark">
+                <i class="bi bi-trophy-fill text-warning me-2"></i> Top Performing Post
+              </h6>
+              <span class="badge bg-warning text-dark small">Most Liked</span>
+            </div>
+            <div id="profileTopPostContent">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Main Column: Update Profile Form & Content Management -->
+        <div class="col-lg-8">
+          <!-- Profile Edit Form (UC-03) -->
+          <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-bold mb-0"><i class="bi bi-person-lines-fill text-primary me-2"></i> Update Profile Details (UC-03)</h5>
+              <span class="badge bg-light text-muted border">Account Settings</span>
+            </div>
+            <form id="profileForm">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="profileNameInput" class="form-label fw-semibold small">Full Name</label>
+                  <input type="text" class="form-control" id="profileNameInput" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="profileEmailInput" class="form-label fw-semibold small">Email Address</label>
+                  <input type="email" class="form-control" id="profileEmailInput" required>
+                </div>
+                <div class="col-12">
+                  <label for="profileBioInput" class="form-label fw-semibold small">Bio / About</label>
+                  <textarea class="form-control" id="profileBioInput" rows="3" placeholder="Tell readers about yourself..."></textarea>
+                </div>
+                <div class="col-md-6">
+                  <label for="profileNewPasswordInput" class="form-label fw-semibold small">Change Password (optional)</label>
+                  <input type="password" class="form-control" id="profileNewPasswordInput" placeholder="Leave empty to keep current password">
+                </div>
+                <div class="col-12 text-end">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check2-circle me-1"></i> Save Changes
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- User's Authored Posts -->
+          <div class="card shadow-sm border-0 rounded-4 p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <div>
+                <h5 class="fw-bold mb-0"><i class="bi bi-journals text-primary me-2"></i> My Published Posts</h5>
+                <small class="text-muted">Manage your articles, review likes, comments, and publish new ideas.</small>
+              </div>
+              <span class="badge bg-primary rounded-pill px-3 py-2" id="profilePostsBadge">0 Posts</span>
+            </div>
+            <div class="list-group list-group-flush" id="myPostsList">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Recent Comments & Reader Feedback on Author's Posts -->
+          <div class="card shadow-sm border-0 rounded-4 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h5 class="fw-bold mb-0"><i class="bi bi-chat-left-heart text-primary me-2"></i> Reader Feedback & Comments</h5>
+                <small class="text-muted">Latest comments left by readers on your blog posts.</small>
+              </div>
+              <span class="badge bg-warning text-dark rounded-pill px-3 py-2" id="profileCommentsBadge">0 Comments</span>
+            </div>
+            <div id="profileCommentsReceivedList">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW 4: ADMINISTRATOR MANAGEMENT DASHBOARD (UC-12)
+         ----------------------------------------------------------------------- -->
+    <div id="adminView" class="d-none">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="fw-bold mb-1"><i class="bi bi-shield-shaded text-primary me-2"></i> Administrator Management (UC-12)</h2>
+          <p class="text-muted mb-0">Overview of all system activity, content moderation, and user controls.</p>
+        </div>
+        <button class="btn btn-primary" onclick="window.blogApp.openCreatePostModal()">
+          <i class="bi bi-plus-lg me-1"></i> Add Post
+        </button>
+      </div>
+
+      <!-- Statistics Counters -->
+      <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+          <div class="stat-card">
+            <div class="stat-icon primary"><i class="bi bi-people-fill"></i></div>
+            <div>
+              <div class="stat-num" id="adminStatUsers">0</div>
+              <div class="stat-label">Total Users</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="stat-card">
+            <div class="stat-icon success"><i class="bi bi-journal-text"></i></div>
+            <div>
+              <div class="stat-num" id="adminStatPosts">0</div>
+              <div class="stat-label">Total Posts</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="stat-card">
+            <div class="stat-icon warning"><i class="bi bi-chat-dots-fill"></i></div>
+            <div>
+              <div class="stat-num" id="adminStatComments">0</div>
+              <div class="stat-label">Total Comments</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="stat-card">
+            <div class="stat-icon danger"><i class="bi bi-heart-fill"></i></div>
+            <div>
+              <div class="stat-num" id="adminStatLikes">0</div>
+              <div class="stat-label">Total Likes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Tabs: Posts, Users, Comments -->
+      <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="card-header bg-white border-bottom p-0">
+          <ul class="nav nav-tabs border-0 px-3 pt-2" id="adminTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active fw-semibold" id="posts-tab" data-bs-toggle="tab" data-bs-target="#tabAdminPosts" type="button" role="tab">
+                <i class="bi bi-journals me-1"></i> Manage Posts
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link fw-semibold" id="users-tab" data-bs-toggle="tab" data-bs-target="#tabAdminUsers" type="button" role="tab">
+                <i class="bi bi-people me-1"></i> Manage Users
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link fw-semibold" id="comments-tab" data-bs-toggle="tab" data-bs-target="#tabAdminComments" type="button" role="tab">
+                <i class="bi bi-chat-left-text me-1"></i> Manage Comments
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body p-4">
+          <div class="tab-content" id="adminTabContent">
+            <!-- Tab 1: Posts -->
+            <div class="tab-pane fade show active" id="tabAdminPosts" role="tabpanel">
+              <div class="table-responsive">
+                <table class="table table-custom align-middle">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Title</th>
+                      <th>Author</th>
+                      <th>Category</th>
+                      <th>Date</th>
+                      <th>Likes</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminPostsTableBody">
+                    <!-- Rendered dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Tab 2: Users -->
+            <div class="tab-pane fade" id="tabAdminUsers" role="tabpanel">
+              <div class="table-responsive">
+                <table class="table table-custom align-middle">
+                  <thead>
+                    <tr>
+                      <th>User ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Activity</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminUsersTableBody">
+                    <!-- Rendered dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Tab 3: Comments -->
+            <div class="tab-pane fade" id="tabAdminComments" role="tabpanel">
+              <div class="table-responsive">
+                <table class="table table-custom align-middle">
+                  <thead>
+                    <tr>
+                      <th>Comment ID</th>
+                      <th>User</th>
+                      <th>Comment Text</th>
+                      <th>Blog Post</th>
+                      <th>Date</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminCommentsTableBody">
+                    <!-- Rendered dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- =========================================================================
+       MODAL: CREATE / EDIT BLOG POST (UC-04, UC-05, UC-09)
+       ========================================================================= -->
+  <div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="postModalTitle">Create New Blog Post</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="postForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="postTitleInput" class="form-label fw-semibold">Post Title <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-control-lg" id="postTitleInput" placeholder="Enter an engaging title..." required>
+            </div>
+
+            <div class="mb-3">
+              <label for="postCategorySelect" class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
+              <select class="form-select" id="postCategorySelect" required>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <!-- Image Upload & Preview Container (UC-09) -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Cover Image (UC-09: Supports JPG, PNG)</label>
+              <input type="file" id="postImageFileInput" class="d-none" accept="image/png, image/jpeg, image/webp">
+              <div class="image-preview-container" id="imageUploadContainer" title="Click to upload an image">
+                <img id="postImagePreview" class="image-preview-img" alt="Post cover preview">
+                <div id="imagePlaceholderText" class="text-center p-3 text-muted">
+                  <i class="bi bi-cloud-arrow-up" style="font-size: 2.5rem;"></i>
+                  <p class="mb-0 fw-semibold mt-1">Click here to upload a cover image</p>
+                  <small class="text-secondary">Supported formats: JPG, PNG (Max 3MB)</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="postContentInput" class="form-label fw-semibold">Post Content <span class="text-danger">*</span></label>
+              <textarea class="form-control" id="postContentInput" rows="8" placeholder="Write your full blog post content here..." required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer border-0 pt-0">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary px-4">
+              <i class="bi bi-send me-1"></i> Save & Publish
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: DELETE POST CONFIRMATION (UC-06)
+       ========================================================================= -->
+  <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-body text-center p-4">
+          <div class="avatar-sm bg-danger-subtle text-danger mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.8rem;">
+            <i class="bi bi-exclamation-triangle"></i>
+          </div>
+          <h4 class="fw-bold mb-2">Delete Blog Post?</h4>
+          <p class="text-muted mb-3">
+            Are you sure you want to delete <span class="fw-bold text-dark" id="deleteConfirmPostTitle">this post</span>? This action cannot be undone.
+          </p>
+          <div class="d-flex justify-content-center gap-2">
+            <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger px-4" id="confirmDeletePostBtn">
+              <i class="bi bi-trash me-1"></i> Delete Post
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: LOGIN (UC-02)
+       ========================================================================= -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold">Sign In to Your Account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <!-- Role Login Prompt Alert -->
+          <div id="loginModalAlert" class="alert alert-info py-2 px-3 small mb-3 d-none">
+            <i class="bi bi-info-circle-fill me-1"></i> <span id="loginModalAlertText"></span>
+          </div>
+
+          <form id="loginForm">
+            <div class="mb-3">
+              <label for="loginEmailInput" class="form-label fw-semibold small">Email Address</label>
+              <input type="email" class="form-control" id="loginEmailInput" placeholder="name@example.com" required>
+            </div>
+            <div class="mb-3">
+              <label for="loginPasswordInput" class="form-label fw-semibold small">Password</label>
+              <input type="password" class="form-control" id="loginPasswordInput" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+              <i class="bi bi-box-arrow-in-right me-1"></i> Log In
+            </button>
+          </form>
+
+          <p class="text-center text-muted small mt-3 mb-0">
+            Don't have an account? 
+            <a href="javascript:void(0)" onclick="bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide(); window.blogApp.openRegisterModal();" class="text-primary fw-bold">Register now</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: REGISTER (UC-01)
+       ========================================================================= -->
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold">Create New Account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="registerForm">
+            <div class="mb-3">
+              <label for="regNameInput" class="form-label fw-semibold small">Full Name</label>
+              <input type="text" class="form-control" id="regNameInput" placeholder="e.g. Jaswanth P" required>
+            </div>
+            <div class="mb-3">
+              <label for="regEmailInput" class="form-label fw-semibold small">Email Address</label>
+              <input type="email" class="form-control" id="regEmailInput" placeholder="r220601@rguktrkv.ac.in" required>
+            </div>
+            <div class="mb-3">
+              <label for="regPasswordInput" class="form-label fw-semibold small">Password</label>
+              <input type="password" class="form-control" id="regPasswordInput" placeholder="Create a strong password" required>
+            </div>
+            <div class="mb-3">
+              <label for="regRoleSelect" class="form-label fw-semibold small">Account Role</label>
+              <select class="form-select" id="regRoleSelect">
+                <option value="author" selected>Author (Can write and manage blog posts)</option>
+              </select>
+              <div class="form-text small text-muted">All registered members receive Author privileges. Administrator accounts are pre-assigned.</div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+              <i class="bi bi-person-check me-1"></i> Register Account
+            </button>
+          </form>
+
+          <p class="text-center text-muted small mt-3 mb-0">
+            Already registered? 
+            <a href="javascript:void(0)" onclick="bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide(); window.blogApp.openLoginModal();" class="text-primary fw-bold">Log in</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: DATABASE & BACKEND ARCHITECTURE (SRS Section 2.2, 3, 9)
+       ========================================================================= -->
+  <div class="modal fade" id="dbModal" tabindex="-1" aria-labelledby="dbModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <div class="d-flex align-items-center gap-2">
+            <div class="avatar-sm bg-primary-subtle text-primary" style="width: 38px; height: 38px; font-size: 1.1rem;">
+              <i class="bi bi-database-check"></i>
+            </div>
+            <div>
+              <h5 class="modal-title fw-bold mb-0" id="dbModalTitle">Backend & Database System Status</h5>
+              <small class="text-muted">Software Requirement Specifications (SRS) Verification</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <!-- Academic Metadata Banner -->
+          <div class="p-3 bg-light rounded-3 mb-3 border">
+            <div class="row g-2 small">
+              <div class="col-sm-6">
+                <strong>Institution:</strong> RGUKT RK Valley<br>
+                <strong>Department:</strong> Computer Science (E-3 Sem-1)
+              </div>
+              <div class="col-sm-6">
+                <strong>Student:</strong> P Jaswanth (R220601)<br>
+                <strong>Faculty Guide:</strong> Lingamurthy Sir
+              </div>
+            </div>
+          </div>
+
+          <!-- Live DB Status Grid -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="card h-100 border p-3 rounded-3 shadow-none bg-body-tertiary">
+                <span class="text-muted small fw-semibold">Active Database Engine</span>
+                <div class="d-flex align-items-center gap-2 mt-1">
+                  <span class="badge bg-primary fs-6 px-3 py-1" id="dbModalEngine">Checking...</span>
+                </div>
+                <div class="small text-muted mt-2">
+                  <strong>Host:</strong> <span id="dbModalHost" class="font-monospace">127.0.0.1:3306</span><br>
+                  <strong>Database:</strong> <span id="dbModalDatabase" class="font-monospace">blog_db</span>
+                </div>
+                <div class="small text-secondary mt-2 border-top pt-2" id="dbModalMessage">
+                  Connecting to backend server...
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card h-100 border p-3 rounded-3 shadow-none bg-body-tertiary">
+                <span class="text-muted small fw-semibold">ER Diagram Table Records (Figure 3)</span>
+                <div class="row g-2 mt-2 small">
+                  <div class="col-6">
+                    <div class="p-2 bg-white rounded border d-flex justify-content-between align-items-center">
+                      <span><i class="bi bi-people me-1 text-primary"></i> users:</span>
+                      <span class="badge bg-secondary" id="dbModalUsers">0</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2 bg-white rounded border d-flex justify-content-between align-items-center">
+                      <span><i class="bi bi-journal-text me-1 text-success"></i> posts:</span>
+                      <span class="badge bg-secondary" id="dbModalPosts">0</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2 bg-white rounded border d-flex justify-content-between align-items-center">
+                      <span><i class="bi bi-chat-dots me-1 text-warning"></i> comments:</span>
+                      <span class="badge bg-secondary" id="dbModalComments">0</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2 bg-white rounded border d-flex justify-content-between align-items-center">
+                      <span><i class="bi bi-heart me-1 text-danger"></i> post_likes:</span>
+                      <span class="badge bg-secondary" id="dbModalLikes">0</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Technologies from SRS Section 2.2 -->
+          <div class="card border rounded-3 p-3 mb-3">
+            <h6 class="fw-bold mb-2"><i class="bi bi-check2-all text-success me-1"></i> SRS Tech Stack Implementation:</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-borderless mb-0 small">
+                <tbody>
+                  <tr>
+                    <td class="fw-semibold text-muted" style="width: 140px;">Frontend:</td>
+                    <td>HTML5, CSS3, JavaScript (ES6+), Bootstrap 5</td>
+                  </tr>
+                  <tr>
+                    <td class="fw-semibold text-muted">Backend:</td>
+                    <td>Python Flask (<code class="text-dark">http://127.0.0.1:5000</code>)</td>
+                  </tr>
+                  <tr>
+                    <td class="fw-semibold text-muted">Database:</td>
+                    <td>MySQL (<code class="text-dark">blog_db</code>) with automatic SQLite fallback (<code class="text-dark">blog.db</code>)</td>
+                  </tr>
+                  <tr>
+                    <td class="fw-semibold text-muted">Development:</td>
+                    <td>Visual Studio Code, XAMPP (Apache & MySQL)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="window.blogApp.checkBackendConnection(); setTimeout(() => window.blogApp.openDbModal(), 400);">
+              <i class="bi bi-arrow-repeat me-1"></i> Re-test Backend Connection
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       Toast Feedback Container
+       ========================================================================= -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- =========================================================================
+       Footer Section
+       ========================================================================= -->
+  <footer class="footer-custom">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <i class="bi bi-journal-richtext text-primary fs-3"></i>
+            <h5 class="mb-0 text-white fw-bold">BLOG WEBSITE</h5>
+          </div>
+          <p class="small mb-3" style="color: #cbd5e1; max-width: 480px;">
+            A web platform designed and built according to the Software Requirement Specifications (SRS) for creating, reading, and managing blog posts.
+          </p>
+          <div class="footer-tech-badge">
+            <i class="bi bi-code-slash text-info me-1"></i>
+            <span>Frontend: HTML5, CSS3, JavaScript, Bootstrap 5 &bull; Backend: Python Flask &bull; DB: MySQL</span>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <h6 class="text-white fw-bold mb-3 border-bottom border-secondary border-opacity-25 pb-2">Academic Info</h6>
+          <ul class="list-unstyled small mb-0">
+            <li class="mb-2"><strong style="color: #93c5fd;">Institution:</strong> <span style="color: #f8fafc;">RGUKT RK Valley</span></li>
+            <li class="mb-2"><strong style="color: #93c5fd;">Department:</strong> <span style="color: #f8fafc;">Computer Science</span></li>
+            <li class="mb-2"><strong style="color: #93c5fd;">Semester:</strong> <span style="color: #f8fafc;">E-3 Sem-1</span></li>
+            <li class="mb-2"><strong style="color: #93c5fd;">Faculty Guide:</strong> <span style="color: #f8fafc;">Lingamurthy Sir</span></li>
+          </ul>
+        </div>
+        <div class="col-lg-3">
+          <h6 class="text-white fw-bold mb-3 border-bottom border-secondary border-opacity-25 pb-2">Author Details</h6>
+          <ul class="list-unstyled small mb-0">
+            <li class="mb-2"><strong style="color: #93c5fd;">Name:</strong> <span style="color: #f8fafc;">P Jaswanth</span></li>
+            <li class="mb-2"><strong style="color: #93c5fd;">Roll No:</strong> <span style="color: #f8fafc;">R220601</span></li>
+            <li class="mb-2"><strong style="color: #93c5fd;">Email:</strong> <a href="mailto:r220601@rguktrkv.ac.in" style="color: #93c5fd; text-decoration: underline;">r220601@rguktrkv.ac.in</a></li>
+            <li class="mt-2 pt-1" style="color: #94a3b8;"><i class="bi bi-file-earmark-check text-success me-1"></i> SRS Specifications v1.0</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="border-secondary opacity-50 my-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center small" style="color: #cbd5e1;">
+        <div>&copy; 2026 Blog Website Project. RGUKT RK Valley Department of Computer Science.</div>
+        <div class="d-flex align-items-center gap-3">
+          <a href="javascript:void(0)" onclick="window.blogApp.openDbModal()" class="badge bg-secondary-subtle text-light border border-secondary border-opacity-50 text-decoration-none py-1 px-2">
+            <i class="bi bi-database me-1 text-info"></i> Database Status
+          </a>
+          <span style="color: #e2e8f0;">Designed &amp; Developed by <strong style="color: #93c5fd;">P Jaswanth</strong></span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 Bundle JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Application JS Core -->
+  <script src="js/app.js"></script>
+
+</body>
+</html>
